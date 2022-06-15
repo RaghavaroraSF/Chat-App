@@ -1,0 +1,7 @@
+{
+    "@sourceloop/cli": {
+      "packageManager": "npm",
+      "version": "4.1.0"
+    }
+  }
+  

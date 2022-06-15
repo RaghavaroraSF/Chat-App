@@ -1,0 +1,26 @@
+{
+    "name": "migrations",
+    "version": "1.0.0",
+    "description": "Package to handle Db migrations for all microservices DBs",
+    "main": "lib/migrations.js",
+    "scripts": {
+        "db:migrate": "run-s db:migrate:*",
+        "db:migrate-down": "run-s db:migrate-down:*",
+        "db:migrate-reset": "run-s db:migrate-reset:*",
+        "db:migrate:chat-app": "./node_modules/.bin/db-migrate up --config 'chat-app/database.json' -m 'chat-app/migrations'",
+        "db:migrate-down:chat-app": "./node_modules/.bin/db-migrate down --config 'chat-app/database.json' -m 'chat-app/migrations'",
+        "db:migrate-reset:chat-app": "./node_modules/.bin/db-migrate reset --config 'chat-app/database.json' -m 'chat-app/migrations'"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "db-migrate": "^1.0.0-beta.18",
+        "dotenv": "^16.0.0",
+        "dotenv-extended": "^2.9.0",
+        "kindof": "^2.0.0"
+    },
+    "devDependencies": {
+        "@types/dotenv": "^8.2.0",
+        "npm-run-all": "^4.1.5"
+    }
+}
