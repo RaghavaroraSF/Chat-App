@@ -3,19 +3,19 @@
     "master": {
       "driver": "pg",
       "host": {
-        "ENV": "CHAT-APP_DB_HOST"
+        "ENV": "CHAT-SERVICE_DB_HOST"
       },
       "port": {
-        "ENV": "CHAT-APP_DB_PORT"
+        "ENV": "CHAT-SERVICE_DB_PORT"
       },
       "user": {
-        "ENV": "CHAT-APP_DB_USER"
+        "ENV": "CHAT-SERVICE_DB_USER"
       },
       "password": {
-        "ENV": "CHAT-APP_DB_PASSWORD"
+        "ENV": "CHAT-SERVICE_DB_PASSWORD"
       },
       "database": {
-        "ENV": "CHAT-APP_DB_DATABASE"
+        "ENV": "CHAT-SERVICE_DB_DATABASE"
       }
     },
     "sql-file": true

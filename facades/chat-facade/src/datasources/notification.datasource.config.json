@@ -23,7 +23,6 @@
 "functions":{
     "postNotification":["token","body"]
 }
-
    }
    ,
    {"template":{
