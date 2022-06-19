@@ -4,6 +4,13 @@ import {PubNubAngular} from 'pubnub-angular2';
 import {environment} from '../../environments/environment';
 import {Chat, ChatMessage} from '../chat.model';
 import {UserService} from '../chat.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { RedirectService } from '../redirect.service';
+import { ActivatedRoute } from "@angular/router";
+import { Params, Route } from '@angular/router';
+import { Router, Event, NavigationStart, NavigationEnd, NavigationError} from '@angular/router';
+
+
 
 @Component({
   selector: 'app-chat',
@@ -26,10 +33,15 @@ import {UserService} from '../chat.service';
   ],
 })
 export class ChatComponent implements OnInit {
+  data=[];
+  myvar!: string;
   constructor(
     private readonly userHttpService: UserService,
     private readonly pubnub: PubNubAngular,
     private readonly ngxNotificationService: NgxNotificationService,
+    private Http: HttpClient,
+    private redirect:RedirectService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -41,9 +53,47 @@ export class ChatComponent implements OnInit {
   public token = '';
   public inRoom = true;
 
+//   login(){
+//     const body={client_id:'test_client_id2',client_secret:'test_client_secret2',username:'admin@example.com2',password:'test123!@#'}
+//     return this.Http.post('http://localhost:3001/auth/login-token',body).subscribe(res=>{
+  
+//       const data=Object.values(res);
+//       console.log(data[0]);
+      
+//  // this.token=data[0];
+      
+//     })
+//   }
+
+GoogleAuthentication(){
+
+this.redirect.redirectTo('http://localhost:3001/auth/google',{
+  
+client_id:'test_client_id',
+client_secret:'test_client_secret'
+})
+const access_token = new URLSearchParams(window.location.search).get('code');
+
+    return this.Http.post('http://localhost:3001/auth/token',{code:access_token,clientId:"test_client_id"}).subscribe(res=>{
+  
+      const data=Object.values(res);
+     
+      
+  this.token=data[0];
+      console.log(this.token);
+      localStorage.setItem('token', this.token);
+      
+    })
+
+}
+
   enterToken() {
     this.userHttpService.getUserTenantId(this.token).subscribe(data => {
+      
       this.senderUUID = data;
+      console.log(this.senderUUID);
+      
+      
     });
   }
 
@@ -51,9 +101,13 @@ export class ChatComponent implements OnInit {
     this.messages = [];
     this.pubnub.unsubscribe(this.channelUUID);
     this.inRoom = false;
+    localStorage.removeItem('token');
   }
 
+
+
   getMessages() {
+    const authHeader = new HttpHeaders({Authorization: `Bearer ${this.token}`});
     this.inRoom = true;
     this.userHttpService.get(this.token, this.channelUUID).subscribe(data => {
       this.messages = [];
