@@ -8,10 +8,11 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {NbThemeModule, NbLayoutModule, NbChatModule} from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {ChatComponent} from './chat/chat.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {UserService} from './chat.service';
 import {FormsModule} from '@angular/forms';
 import {NgxNotificationModule} from 'ngx-notification';
+import { InterceptorService } from './interceptor';
 
 @NgModule({
   declarations: [AppComponent, ChatComponent],
@@ -27,7 +28,7 @@ import {NgxNotificationModule} from 'ngx-notification';
     FormsModule,
     NgxNotificationModule,
   ],
-  providers: [UserService, PubNubAngular],
+  providers: [UserService, PubNubAngular,{ provide: HTTP_INTERCEPTORS, useClass:InterceptorService , multi: true }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
